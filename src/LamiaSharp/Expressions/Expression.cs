@@ -4,27 +4,15 @@ namespace LamiaSharp.Expressions
 {
     public abstract class Expression
     {
-        public static Expression From(string token)
+        public static Expression From(string token) => token switch
         {
-            if (token == "true")
-                return new Boolean(true);
-
-            if (token == "false")
-                return new Boolean(false);
-
-            if (token == "nil")
-                return new Nil();
-
-            if (token.StartsWith('"'))
-                return new String(token.Trim('"'));
-
-            if (int.TryParse(token, out var n))
-                return new Integer(n);
-
-            if (decimal.TryParse(token, out var x))
-                return new Real(x);
-
-            return new Symbol(token);
-        }
+            "nil" => new Nil(),
+            "true" => new Boolean(true),
+            "false" => new Boolean(false),
+            _ when token.StartsWith('"') => new String(token.Trim('"')),
+            _ when int.TryParse(token, out var n) => new Integer(n),
+            _ when decimal.TryParse(token, out var x) => new Real(x),
+            _ => new Symbol(token)
+        };
     }
 }
