@@ -7,5 +7,10 @@ namespace LamiaSharp.Values
         public String(string value) : base(value)
         {
         }
+
+        public override string ToString()
+        {
+            return $"\"{Boxed}\"";
+        }
     }
 }

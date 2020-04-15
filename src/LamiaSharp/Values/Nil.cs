@@ -7,5 +7,10 @@ namespace LamiaSharp.Values
         public Nil() : base(null)
         {
         }
+
+        public override string ToString()
+        {
+            return "nil";
+        }
     }
 }

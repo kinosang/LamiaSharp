@@ -7,5 +7,10 @@ namespace LamiaSharp.Values
         public Boolean(bool value) : base(value)
         {
         }
+
+        public override string ToString()
+        {
+            return (bool)Boxed ? "true" : "false";
+        }
     }
 }
