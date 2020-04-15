@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using LamiaSharp.Expression;
+using LamiaSharp.Expressions;
 
 namespace LamiaSharp
 {
@@ -29,9 +30,9 @@ namespace LamiaSharp
                 .ToArray();
         }
 
-        public static ExpList Listize(string[] tokens)
+        public static ExpressionList Listize(string[] tokens)
         {
-            var list = new ExpList();
+            var list = new ExpressionList();
             list.Enter();
 
             for (var i = 0; i < tokens.Length; i++)
@@ -58,7 +59,7 @@ namespace LamiaSharp
             throw new Exception($"Expect '{EOC}'");
         }
 
-        public static ExpList Parse(string input)
+        public static ExpressionList Parse(string input)
         {
             var tokens = Tokenize(input);
 

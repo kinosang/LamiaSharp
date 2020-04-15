@@ -1,9 +1,8 @@
-
-namespace LamiaSharp.Expression
+namespace LamiaSharp.Expressions
 {
-    public class Symbol : IExpression
+    public class Symbol : Expression
     {
-        public readonly string Name;
+        protected readonly string Name;
 
         public Symbol(string name)
         {

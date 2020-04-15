@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace LamiaSharp.Expression
+namespace LamiaSharp.Expressions
 {
-    public class ExpList : IExpression, IEnumerable<IExpression>
+    public class ExpressionList : Expression, IEnumerable<Expression>
     {
-        private IList<IExpression> values = new List<IExpression>();
+        private IList<Expression> values = new List<Expression>();
 
-        public ExpListNode First { get; set; }
-        public ExpListNode Last { get; set; }
+        public ExpressionListNode First { get; set; }
+
+        public ExpressionListNode Last { get; set; }
 
         public int Count { get; private set; } = 0;
 
         public int Total { get; private set; } = 0;
 
-        public ExpList AddFirst(ExpListNode node)
+        public ExpressionList AddFirst(ExpressionListNode node)
         {
             if (First == null)
             {
@@ -33,7 +34,7 @@ namespace LamiaSharp.Expression
 
             Count++;
 
-            if (node.Value is ExpList sub)
+            if (node.Value is ExpressionList sub)
             {
 
                 Total += sub.Total;
@@ -46,12 +47,12 @@ namespace LamiaSharp.Expression
             return this;
         }
 
-        public ExpList AddFirst(IExpression value)
+        public ExpressionList AddFirst(Expression value)
         {
-            return AddFirst(new ExpListNode(value));
+            return AddFirst(new ExpressionListNode(value));
         }
 
-        public ExpList AddLast(ExpListNode node)
+        public ExpressionList AddLast(ExpressionListNode node)
         {
             if (Last == null)
             {
@@ -70,7 +71,7 @@ namespace LamiaSharp.Expression
 
             Count++;
 
-            if (node.Value is ExpList sub)
+            if (node.Value is ExpressionList sub)
             {
 
                 Total += sub.Total;
@@ -83,26 +84,26 @@ namespace LamiaSharp.Expression
             return this;
         }
 
-        public ExpList AddLast(IExpression value)
+        public ExpressionList AddLast(Expression value)
         {
-            return AddLast(new ExpListNode(value));
+            return AddLast(new ExpressionListNode(value));
         }
 
-        public ExpList Enter()
-        {
-            Total++;
-
-            return this;
-        }
-
-        public ExpList Return()
+        public ExpressionList Enter()
         {
             Total++;
 
             return this;
         }
 
-        public IEnumerator<IExpression> GetEnumerator()
+        public ExpressionList Return()
+        {
+            Total++;
+
+            return this;
+        }
+
+        public IEnumerator<Expression> GetEnumerator()
         {
             return values.GetEnumerator();
         }
