@@ -7,21 +7,21 @@ namespace LamiaSharp
 {
     public class Parser
     {
-        public const string BOC = "(";
-        public const string EOC = ")";
-        public const string COMMENT = ";;";
+        public const string Boc = "(";
+        public const string Eoc = ")";
+        public const string Comment = ";;";
 
         public static string[] Tokenize(string input)
         {
             var lines = input
-                .Replace(BOC, $" {BOC} ")
-                .Replace(EOC, $" {EOC} ")
+                .Replace(Boc, $" {Boc} ")
+                .Replace(Eoc, $" {Eoc} ")
                 .Split('\n');
 
             return lines
                 .Select(l =>
                 {
-                    var i = l.IndexOf(COMMENT);
+                    var i = l.IndexOf(Comment, StringComparison.Ordinal);
 
                     return i > 0 ? l.Substring(0, i) : l;
                 })
@@ -39,24 +39,23 @@ namespace LamiaSharp
             {
                 var token = tokens[i];
 
-                if (token == BOC)
+                switch (token)
                 {
-                    var node = Listize(tokens.Skip(i + 1).ToArray());
-                    list.AddLast(node);
-                    i += node.Total - 1;
-                }
-                else if (token == EOC)
-                {
-                    list.Return();
-                    return list;
-                }
-                else
-                {
-                    list.AddLast(Expression.From(token));
+                    case Boc:
+                        var node = Listize(tokens.Skip(i + 1).ToArray());
+                        list.AddLast(node);
+                        i += node.Total - 1;
+                        break;
+                    case Eoc:
+                        list.Return();
+                        return list;
+                    default:
+                        list.AddLast(Expression.From(token));
+                        break;
                 }
             }
 
-            throw new Exception($"Expect '{EOC}'");
+            throw new Exception($"Expect '{Eoc}'");
         }
 
         public static ExpressionList[] Evaluatize(string[] tokens)
@@ -65,7 +64,7 @@ namespace LamiaSharp
 
             for (var i = 0; i < tokens.Length; i++)
             {
-                if (tokens[i] != BOC) continue;
+                if (tokens[i] != Boc) continue;
 
                 var line = Listize(tokens.Skip(i + 1).ToArray());
                 lines.Add(line);
@@ -77,7 +76,7 @@ namespace LamiaSharp
                 return lines.ToArray();
             }
 
-            throw new Exception($"Expect '{BOC}'");
+            throw new Exception($"Expect '{Boc}'");
         }
 
         public static ExpressionList[] Parse(string input)

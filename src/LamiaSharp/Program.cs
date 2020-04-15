@@ -6,7 +6,7 @@ namespace LamiaSharp
     {
         static void Main(string[] args)
         {
-            var lisp = @"
+            const string lisp = @"
 (let fib (lambda (n) ;; Fibonacci!
     (if (< n 2)
         1

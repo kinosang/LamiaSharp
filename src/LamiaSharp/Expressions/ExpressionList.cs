@@ -5,15 +5,15 @@ namespace LamiaSharp.Expressions
 {
     public class ExpressionList : Expression, IEnumerable<Expression>
     {
-        private IList<Expression> values = new List<Expression>();
+        private readonly IList<Expression> _values = new List<Expression>();
 
         public ExpressionListNode First { get; set; }
 
         public ExpressionListNode Last { get; set; }
 
-        public int Count { get; private set; } = 0;
+        public int Count { get; private set; }
 
-        public int Total { get; private set; } = 0;
+        public int Total { get; private set; }
 
         public ExpressionList AddFirst(ExpressionListNode node)
         {
@@ -30,7 +30,7 @@ namespace LamiaSharp.Expressions
                 First = node;
             }
 
-            values.Insert(0, node.Value);
+            _values.Insert(0, node.Value);
 
             Count++;
 
@@ -67,7 +67,7 @@ namespace LamiaSharp.Expressions
                 Last = node;
             }
 
-            values.Add(node.Value);
+            _values.Add(node.Value);
 
             Count++;
 
@@ -105,19 +105,19 @@ namespace LamiaSharp.Expressions
 
         public IEnumerator<Expression> GetEnumerator()
         {
-            return values.GetEnumerator();
+            return _values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return values.GetEnumerator();
+            return _values.GetEnumerator();
         }
 
         public override string ToString()
         {
-            var buf = Parser.BOC;
+            var buf = Parser.Boc;
 
-            foreach (var value in values)
+            foreach (var value in _values)
             {
                 buf += value.ToString();
                 buf += " ";
@@ -125,7 +125,7 @@ namespace LamiaSharp.Expressions
 
             buf = buf.TrimEnd();
 
-            buf += Parser.EOC;
+            buf += Parser.Eoc;
 
             return buf;
         }

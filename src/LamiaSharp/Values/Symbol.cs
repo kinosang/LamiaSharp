@@ -1,4 +1,6 @@
-namespace LamiaSharp.Expressions
+using LamiaSharp.Expressions;
+
+namespace LamiaSharp.Values
 {
     public class Symbol : Value
     {

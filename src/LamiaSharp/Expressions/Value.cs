@@ -2,7 +2,7 @@ namespace LamiaSharp.Expressions
 {
     public class Value : Expression
     {
-        protected object Boxed { get; private set; }
+        protected object Boxed { get; }
 
         public Value(object value)
         {
