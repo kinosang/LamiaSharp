@@ -59,16 +59,32 @@ namespace LamiaSharp
             throw new Exception($"Expect '{EOC}'");
         }
 
-        public static ExpressionList Parse(string input)
+        public static ExpressionList[] Evaluatize(string[] tokens)
         {
-            var tokens = Tokenize(input);
+            var lines = new List<ExpressionList>();
 
-            if (tokens.First() == BOC)
+            for (var i = 0; i < tokens.Length; i++)
             {
-                return Listize(tokens.Skip(1).ToArray());
+                if (tokens[i] != BOC) continue;
+
+                var line = Listize(tokens.Skip(i + 1).ToArray());
+                lines.Add(line);
+                i += line.Total - 1;
+            }
+
+            if (lines.Count > 0)
+            {
+                return lines.ToArray();
             }
 
             throw new Exception($"Expect '{BOC}'");
+        }
+
+        public static ExpressionList[] Parse(string input)
+        {
+            var tokens = Tokenize(input);
+
+            return Evaluatize(tokens);
         }
     }
 }
