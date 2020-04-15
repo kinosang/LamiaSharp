@@ -52,7 +52,7 @@ namespace LamiaSharp
                 }
                 else
                 {
-                    list.AddLast(new Symbol(token));
+                    list.AddLast(Expression.From(token));
                 }
             }
 
