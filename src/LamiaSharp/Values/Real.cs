@@ -1,6 +1,6 @@
 namespace LamiaSharp.Values
 {
-    public class Real : Number
+    public class Real : Value<decimal>
     {
         public Real(decimal value) : base(value)
         {

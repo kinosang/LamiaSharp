@@ -2,13 +2,13 @@ namespace LamiaSharp.Expressions
 {
     public class ExpressionListNode
     {
-        public Expression Value { get; set; }
+        public IExpression Value { get; set; }
 
         public ExpressionListNode Next { get; set; }
 
         public ExpressionListNode Previous { get; set; }
 
-        public ExpressionListNode(Expression value)
+        public ExpressionListNode(IExpression value)
         {
             Value = value;
         }

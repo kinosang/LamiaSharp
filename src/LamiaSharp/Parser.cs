@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LamiaSharp.Expressions;
+using LamiaSharp.Values;
 
 namespace LamiaSharp
 {
@@ -32,10 +33,11 @@ namespace LamiaSharp
 
         public static ExpressionList Listize(string[] tokens)
         {
-            var list = new ExpressionList();
+            var list = new ExpressionList(tokens[0]);
+
             list.Enter();
 
-            for (var i = 0; i < tokens.Length; i++)
+            for (var i = 1; i < tokens.Length; i++)
             {
                 var token = tokens[i];
 
@@ -44,7 +46,7 @@ namespace LamiaSharp
                     case Boc:
                         var node = Listize(tokens.Skip(i + 1).ToArray());
                         list.AddLast(node);
-                        i += node.Total - 1;
+                        i += node.Tokens - 1;
                         break;
                     case Eoc:
                         list.Return();
@@ -58,7 +60,7 @@ namespace LamiaSharp
             throw new Exception($"Expect '{Eoc}'");
         }
 
-        public static ExpressionList[] Evaluatize(string[] tokens)
+        public static Closure Evaluatize(string[] tokens)
         {
             var lines = new List<ExpressionList>();
 
@@ -68,18 +70,18 @@ namespace LamiaSharp
 
                 var line = Listize(tokens.Skip(i + 1).ToArray());
                 lines.Add(line);
-                i += line.Total - 1;
+                i += line.Tokens - 1;
             }
 
             if (lines.Count > 0)
             {
-                return lines.ToArray();
+                return new Closure(new Symbol[0], lines);
             }
 
             throw new Exception($"Expect '{Boc}'");
         }
 
-        public static ExpressionList[] Parse(string input)
+        public static Closure Parse(string input)
         {
             var tokens = Tokenize(input);
 

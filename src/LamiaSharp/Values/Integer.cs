@@ -1,6 +1,6 @@
 namespace LamiaSharp.Values
 {
-    public class Integer : Number
+    public class Integer : Value<long>
     {
         public Integer(long value) : base(value)
         {

@@ -1,8 +1,6 @@
-using LamiaSharp.Expressions;
-
 namespace LamiaSharp.Values
 {
-    public class Nil : Value
+    public class Nil : Value<object>
     {
         public Nil() : base(null)
         {

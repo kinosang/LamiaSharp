@@ -39,7 +39,6 @@ namespace LamiaSharp.Tests
         {
             var integer = Expression.From("42");
             Assert.IsType<Integer>(integer);
-            Assert.IsAssignableFrom<Number>(integer);
             Assert.Equal("42", integer.ToString());
         }
 
@@ -48,7 +47,6 @@ namespace LamiaSharp.Tests
         {
             var number = Expression.From("4.2");
             Assert.IsType<Double>(number);
-            Assert.IsAssignableFrom<Number>(number);
             Assert.Equal("4.2", number.ToString());
         }
 
@@ -57,7 +55,6 @@ namespace LamiaSharp.Tests
         {
             var real = Expression.From("4.2m");
             Assert.IsType<Real>(real);
-            Assert.IsAssignableFrom<Number>(real);
             Assert.Equal("4.2m", real.ToString());
         }
     }

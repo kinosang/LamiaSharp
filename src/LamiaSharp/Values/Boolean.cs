@@ -1,8 +1,6 @@
-using LamiaSharp.Expressions;
-
 namespace LamiaSharp.Values
 {
-    public class Boolean : Value
+    public class Boolean : Value<bool>
     {
         public Boolean(bool value) : base(value)
         {
@@ -10,7 +8,7 @@ namespace LamiaSharp.Values
 
         public override string ToString()
         {
-            return (bool)Boxed ? "true" : "false";
+            return Boxed ? "true" : "false";
         }
     }
 }

@@ -2,9 +2,9 @@ using LamiaSharp.Values;
 
 namespace LamiaSharp.Expressions
 {
-    public abstract class Expression
+    public abstract class Expression : IExpression
     {
-        public static Expression From(string token) => token switch
+        public static IExpression From(string token) => token switch
         {
             "nil" => new Nil(),
             "true" => new Boolean(true),

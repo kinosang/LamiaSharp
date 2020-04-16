@@ -1,8 +1,6 @@
-using LamiaSharp.Expressions;
-
 namespace LamiaSharp.Values
 {
-    public class String : Value
+    public class String : Value<string>
     {
         public String(string value) : base(value)
         {

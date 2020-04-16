@@ -1,10 +1,10 @@
-namespace LamiaSharp.Expressions
+namespace LamiaSharp.Values
 {
-    public class Value : Expression
+    public class Value<T> : IValue
     {
-        protected object Boxed { get; }
+        public readonly T Boxed;
 
-        public Value(object value)
+        public Value(T value)
         {
             Boxed = value;
         }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 namespace LamiaSharp.Expressions
 {
-    public class ExpressionList : Expression, IEnumerable<Expression>
+    public class ExpressionList : Expression, IEnumerable<IExpression>
     {
-        private readonly IList<Expression> _values = new List<Expression>();
+        private readonly IList<IExpression> _values = new List<IExpression>();
+
+        public readonly string Op;
 
         public ExpressionListNode First { get; set; }
 
@@ -13,14 +15,19 @@ namespace LamiaSharp.Expressions
 
         public int Count { get; private set; }
 
-        public int Total { get; private set; }
+        public int Tokens { get; private set; } = 1;
+
+        public ExpressionList(string op)
+        {
+            Op = op;
+        }
 
         public ExpressionList AddFirst(ExpressionListNode node)
         {
             if (First == null)
             {
                 First = node;
-                Last = node;
+                Last = First;
             }
             else
             {
@@ -36,36 +43,34 @@ namespace LamiaSharp.Expressions
 
             if (node.Value is ExpressionList sub)
             {
-
-                Total += sub.Total;
+                Tokens += sub.Tokens;
             }
             else
             {
-                Total++;
+                Tokens++;
             }
 
             return this;
         }
 
-        public ExpressionList AddFirst(Expression value)
+        public ExpressionList AddFirst(IExpression value)
         {
             return AddFirst(new ExpressionListNode(value));
         }
 
         public ExpressionList AddLast(ExpressionListNode node)
         {
-            if (Last == null)
+            if (First == null)
             {
-                Last = node;
-                First = node;
-            }
-            else
-            {
-                Last.Next = node;
-                node.Previous = Last;
+                AddFirst(node);
 
-                Last = node;
+                return this;
             }
+
+            Last.Next = node;
+            node.Previous = Last;
+
+            Last = node;
 
             _values.Add(node.Value);
 
@@ -73,54 +78,55 @@ namespace LamiaSharp.Expressions
 
             if (node.Value is ExpressionList sub)
             {
-
-                Total += sub.Total;
+                Tokens += sub.Tokens;
             }
             else
             {
-                Total++;
+                Tokens++;
             }
 
             return this;
         }
 
-        public ExpressionList AddLast(Expression value)
+        public ExpressionList AddLast(IExpression value)
         {
             return AddLast(new ExpressionListNode(value));
         }
 
         public ExpressionList Enter()
         {
-            Total++;
+            Tokens++;
 
             return this;
         }
 
         public ExpressionList Return()
         {
-            Total++;
+            Tokens++;
 
             return this;
         }
 
-        public IEnumerator<Expression> GetEnumerator()
+        public IEnumerator<IExpression> GetEnumerator()
         {
             return _values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _values.GetEnumerator();
+            return GetEnumerator();
         }
 
         public override string ToString()
         {
             var buf = Parser.Boc;
 
+            buf += Op;
+
             foreach (var value in _values)
             {
-                buf += value.ToString();
                 buf += " ";
+                buf += value.ToString();
             }
 
             buf = buf.TrimEnd();
