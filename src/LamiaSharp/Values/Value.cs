@@ -1,17 +1,28 @@
+using LamiaSharp.Expressions;
+
 namespace LamiaSharp.Values
 {
     public class Value<T> : IValue
     {
-        public readonly T Boxed;
+        public virtual string Type => Types.Any;
+
+        public readonly T Source;
+
+        public object Boxed => Source;
 
         public Value(T value)
         {
-            Boxed = value;
+            Source = value;
+        }
+
+        public virtual IExpression Evaluate(Environment env)
+        {
+            return this;
         }
 
         public override string ToString()
         {
-            return Boxed.ToString();
+            return Source.ToString();
         }
     }
 }

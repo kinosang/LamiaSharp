@@ -2,13 +2,19 @@ namespace LamiaSharp.Values
 {
     public class Boolean : Value<bool>
     {
+        public static Boolean True = new Boolean(true);
+
+        public static Boolean False = new Boolean(false);
+
+        public override string Type => Types.Boolean;
+
         public Boolean(bool value) : base(value)
         {
         }
 
         public override string ToString()
         {
-            return Boxed ? "true" : "false";
+            return Source ? "true" : "false";
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using LamiaSharp.Values;
 
 namespace LamiaSharp
 {
@@ -21,6 +22,8 @@ namespace LamiaSharp
             {
                 Console.WriteLine(expression);
             }
+
+            Console.WriteLine(program.Run(new IValue[0]));
         }
     }
 }

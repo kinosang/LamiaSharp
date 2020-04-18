@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using LamiaSharp.Exceptions;
+using LamiaSharp.Values;
 
 namespace LamiaSharp.Expressions
 {
@@ -9,17 +12,22 @@ namespace LamiaSharp.Expressions
 
         public readonly string Op;
 
+        // TODO: Update Type to actual
+        public override string Type => Types.Any;
+
         public ExpressionListNode First { get; set; }
 
         public ExpressionListNode Last { get; set; }
 
         public int Count { get; private set; }
 
-        public int Tokens { get; private set; } = 1;
+        public int Tokens { get; private set; }
 
         public ExpressionList(string op)
         {
             Op = op;
+
+            AddFirst(new Symbol(op));
         }
 
         public ExpressionList AddFirst(ExpressionListNode node)
@@ -60,13 +68,6 @@ namespace LamiaSharp.Expressions
 
         public ExpressionList AddLast(ExpressionListNode node)
         {
-            if (First == null)
-            {
-                AddFirst(node);
-
-                return this;
-            }
-
             Last.Next = node;
             node.Previous = Last;
 
@@ -117,16 +118,33 @@ namespace LamiaSharp.Expressions
             return GetEnumerator();
         }
 
+        public override IExpression Evaluate(Environment env)
+        {
+            if (!env.TryGetValue(Op, out var express))
+            {
+                throw new RuntimeException($"Call to undefined symbol '{Op}'");
+            }
+
+            var value = express.Evaluate(env);
+
+            if (!(value is Closure closure))
+            {
+                throw new RuntimeException($"Except closure, got '{value}'");
+            }
+
+            var arguments = _values.Skip(1).Select(p => p.Evaluate(env)).OfType<IValue>();
+
+            return closure.Call(arguments);
+        }
+
         public override string ToString()
         {
             var buf = Parser.Boc;
 
-            buf += Op;
-
             foreach (var value in _values)
             {
-                buf += " ";
                 buf += value.ToString();
+                buf += " ";
             }
 
             buf = buf.TrimEnd();

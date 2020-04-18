@@ -1,7 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using LamiaSharp.Exceptions;
 using LamiaSharp.Expressions;
+using LamiaSharp.Keywords;
 using LamiaSharp.Values;
 
 namespace LamiaSharp
@@ -22,7 +23,7 @@ namespace LamiaSharp
             return lines
                 .Select(l =>
                 {
-                    var i = l.IndexOf(Comment, StringComparison.Ordinal);
+                    var i = l.IndexOf(Comment, System.StringComparison.Ordinal);
 
                     return i > 0 ? l.Substring(0, i) : l;
                 })
@@ -33,7 +34,18 @@ namespace LamiaSharp
 
         public static ExpressionList Listize(string[] tokens)
         {
-            var list = new ExpressionList(tokens[0]);
+            var list = tokens[0] switch
+            {
+                Let.Token => new Let(),
+                If.Token => new If(),
+                Lambda.Token => new Lambda(),
+                "lambda" => new Lambda(),
+                Gt.Token => new Gt(),
+                Lt.Token => new Lt(),
+                Add.Token => new Add(),
+                Minus.Token => new Minus(),
+                _ => new ExpressionList(tokens[0])
+            };
 
             list.Enter();
 
@@ -57,7 +69,7 @@ namespace LamiaSharp
                 }
             }
 
-            throw new Exception($"Expect '{Eoc}'");
+            throw new RuntimeException($"Expect '{Eoc}'");
         }
 
         public static Closure Evaluatize(string[] tokens)
@@ -78,7 +90,7 @@ namespace LamiaSharp
                 return new Closure(new Symbol[0], lines);
             }
 
-            throw new Exception($"Expect '{Boc}'");
+            throw new RuntimeException($"Expect '{Boc}'");
         }
 
         public static Closure Parse(string input)
