@@ -94,14 +94,7 @@ namespace LamiaSharp.Expressions
             return AddLast(new ExpressionListNode(value));
         }
 
-        public ExpressionList Enter()
-        {
-            Tokens++;
-
-            return this;
-        }
-
-        public ExpressionList Return()
+        public ExpressionList Elongate()
         {
             Tokens++;
 

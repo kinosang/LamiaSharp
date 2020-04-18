@@ -47,7 +47,7 @@ namespace LamiaSharp
                 _ => new ExpressionList(tokens[0])
             };
 
-            list.Enter();
+            list.Elongate();
 
             for (var i = 1; i < tokens.Length; i++)
             {
@@ -61,7 +61,7 @@ namespace LamiaSharp
                         i += node.Tokens - 1;
                         break;
                     case Eoc:
-                        list.Return();
+                        list.Elongate();
                         return list;
                     default:
                         list.AddLast(Expression.From(token));
