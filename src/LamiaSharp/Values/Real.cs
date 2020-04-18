@@ -2,7 +2,7 @@ namespace LamiaSharp.Values
 {
     public class Real : Value<decimal>
     {
-        public override string Type => Types.Real;
+        public override string Type { get; set; } = Types.Real;
 
         public Real(decimal value) : base(value)
         {

@@ -2,7 +2,7 @@ namespace LamiaSharp.Values
 {
     public class String : Value<string>
     {
-        public override string Type => Types.String;
+        public override string Type { get; set; } = Types.String;
 
         public String(string value) : base(value)
         {

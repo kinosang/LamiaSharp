@@ -5,7 +5,7 @@ namespace LamiaSharp.Values
     public class Symbol : Value<string>
     {
         // TODO: Update Type to actual
-        public override string Type => Types.Any;
+        public override string Type { get; set; } = Types.Any;
 
         public Symbol(string name) : base(name)
         {

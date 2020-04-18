@@ -6,7 +6,7 @@ namespace LamiaSharp.Values
 
         public static Boolean False = new Boolean(false);
 
-        public override string Type => Types.Boolean;
+        public override string Type { get; set; } = Types.Boolean;
 
         public Boolean(bool value) : base(value)
         {

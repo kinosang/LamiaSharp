@@ -4,7 +4,7 @@ namespace LamiaSharp.Values
     {
         public static Nil Default = new Nil();
 
-        public override string Type => Types.Nil;
+        public override string Type { get; set; } = Types.Nil;
 
         public Nil() : base(null)
         {

@@ -4,7 +4,7 @@ namespace LamiaSharp.Values
 {
     public class Value<T> : IValue
     {
-        public virtual string Type => Types.Any;
+        public virtual string Type { get; set; } = Types.Any;
 
         public readonly T Source;
 

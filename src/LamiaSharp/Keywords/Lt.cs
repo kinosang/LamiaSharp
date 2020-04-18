@@ -12,7 +12,7 @@ namespace LamiaSharp.Keywords
         protected override IEnumerable<string> LeftAllowedTypes => Types.NumericTypes;
         protected override IEnumerable<string> RightAllowedTypes => Types.NumericTypes;
 
-        public override string Type => Types.Boolean;
+        public override string Type { get; set; } = Types.Boolean;
 
         public Lt() : base(Token)
         {

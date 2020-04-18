@@ -4,7 +4,7 @@ namespace LamiaSharp.Expressions
 {
     public abstract class Expression : IExpression
     {
-        public virtual string Type => Types.Any;
+        public virtual string Type { get; set; } = Types.Any;
 
         public static IExpression From(string token) => token switch
         {

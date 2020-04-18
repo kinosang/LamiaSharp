@@ -12,7 +12,7 @@ namespace LamiaSharp.Keywords
         protected override IEnumerable<string> RightAllowedTypes => Types.NumericTypes;
 
         // TODO: Update Type to actual
-        public override string Type => Types.Any;
+        public override string Type { get; set; } = Types.Any;
 
         public Minus() : base(Token)
         {

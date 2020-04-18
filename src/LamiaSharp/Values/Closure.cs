@@ -8,7 +8,7 @@ namespace LamiaSharp.Values
     public class Closure : Value<object>, IEnumerable<ExpressionList>
     {
         // TODO: Update Type to actual
-        public override string Type => "any -> any";
+        public override string Type { get; set; } = "any -> any";
 
         public Environment Environment;
 

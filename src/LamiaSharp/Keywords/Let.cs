@@ -9,7 +9,7 @@ namespace LamiaSharp.Keywords
         public const string Token = "let";
 
         // TODO: Update Type to actual
-        public override string Type => Types.Any;
+        public override string Type { get; set; } = Types.Any;
 
         public Let() : base(Token)
         {

@@ -13,7 +13,7 @@ namespace LamiaSharp.Expressions
         public readonly string Op;
 
         // TODO: Update Type to actual
-        public override string Type => Types.Any;
+        public override string Type { get; set; } = Types.Any;
 
         public ExpressionListNode First { get; set; }
 

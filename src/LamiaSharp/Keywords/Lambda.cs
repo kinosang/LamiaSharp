@@ -11,7 +11,7 @@ namespace LamiaSharp.Keywords
         public const string Token = "λ";
 
         // TODO: Update Type to actual
-        public override string Type => "any -> any";
+        public override string Type { get; set; } = "any -> any";
 
         public Lambda() : base(Token)
         {
