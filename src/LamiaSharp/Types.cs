@@ -8,6 +8,8 @@ namespace LamiaSharp
 
         public const string Boolean = "boolean";
 
+        public const string Char = "char";
+
         public const string Double = "double";
 
         public const string Integer = "integer";
