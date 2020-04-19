@@ -10,9 +10,9 @@ namespace LamiaSharp.Keywords
         public static partial class Bitwise
         {
             [Alias(Token)]
-            public class Rshift : BinaryExpression
+            public class LShift : BinaryExpression
             {
-                public const string Token = ">>";
+                public const string Token = "<<";
 
                 protected override IEnumerable<string> LeftAllowedTypes => new[] { Types.Integer };
                 protected override IEnumerable<string> RightAllowedTypes => new[] { Types.Integer };
@@ -20,7 +20,7 @@ namespace LamiaSharp.Keywords
                 // TODO: Update Type to actual
                 public override string Type { get; set; } = Types.Any;
 
-                public Rshift() : base(Token)
+                public LShift() : base(Token)
                 {
                 }
 
@@ -49,7 +49,7 @@ namespace LamiaSharp.Keywords
                         throw new System.Exception($"Except integer, got {rv.Boxed}");
                     }
 
-                    return new Integer(lvalue >> (int)rvalue);
+                    return new Integer(lvalue << (int)rvalue);
                 }
             }
         }

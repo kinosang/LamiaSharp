@@ -16,6 +16,8 @@ namespace LamiaSharp
 
         public const string Nil = "nil";
 
+        public const string Numeric = "numeric";
+
         public const string Real = "real";
 
         public const string String = "string";

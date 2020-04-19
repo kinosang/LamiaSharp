@@ -1,6 +1,6 @@
 namespace LamiaSharp.Values
 {
-    public class Double : Value<double>
+    public class Double : Numeric<double>
     {
         public override string Type { get; set; } = Types.Double;
 

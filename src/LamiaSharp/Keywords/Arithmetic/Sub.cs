@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -10,12 +11,9 @@ namespace LamiaSharp.Keywords
         public static partial class Arithmetic
         {
             [Alias(Token)]
-            public class Sub : BinaryExpression
+            public class Sub : DynamicExpression
             {
                 public const string Token = "-";
-
-                protected override IEnumerable<string> LeftAllowedTypes => Types.NumericTypes;
-                protected override IEnumerable<string> RightAllowedTypes => Types.NumericTypes;
 
                 // TODO: Update Type to actual
                 public override string Type { get; set; } = Types.Any;
@@ -24,35 +22,27 @@ namespace LamiaSharp.Keywords
                 {
                 }
 
-                public override IExpression Call(Environment env, string op, IExpression left, IExpression right)
+                public override IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments)
                 {
-                    var l = left.Evaluate(env);
-                    var r = right.Evaluate(env);
+                    var values = arguments.Select(a => a.Evaluate(env)).OfType<INumeric>().ToArray();
 
-                    if (!(l is IValue lv))
+                    var head = values.First();
+                    var tails = values.Skip(1).ToArray();
+
+                    if (values.Any(v => v.Boxed is decimal))
                     {
-                        throw new System.Exception($"Except value, got {l}");
+                        var result = tails.Aggregate((decimal)head.Boxed, (acc, v) => acc - (decimal)v.Boxed);
+                        return new Real(result);
                     }
 
-                    if (!(r is IValue rv))
+                    if (values.Any(v => v.Boxed is double))
                     {
-                        throw new System.Exception($"Except value, got {r}");
+                        var result = tails.Aggregate((double)head.Boxed, (acc, v) => acc - (double)v.Boxed);
+                        return new Double(result);
                     }
 
-                    if (lv.Boxed is decimal || rv.Boxed is decimal)
-                    {
-                        var result = (lv.Boxed as decimal?) - (rv.Boxed as decimal?);
-                        return new Real(result ?? 0);
-                    }
-
-                    if (lv.Boxed is double || rv.Boxed is double)
-                    {
-                        var result = (lv.Boxed as double?) - (rv.Boxed as double?);
-                        return new Double(result ?? 0);
-                    }
-
-                    var final = (lv.Boxed as long?) - (rv.Boxed as long?);
-                    return new Integer(final ?? 0);
+                    var final = tails.Aggregate((long)head.Boxed, (acc, v) => acc - (long)v.Boxed);
+                    return new Integer(final);
                 }
             }
         }

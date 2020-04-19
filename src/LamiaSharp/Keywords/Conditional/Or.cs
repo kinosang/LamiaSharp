@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -10,22 +11,24 @@ namespace LamiaSharp.Keywords
         public static partial class Conditional
         {
             [Alias(Token)]
-            public class Or : BinaryExpression
+            public class Or : DynamicExpression
             {
                 public const string Token = "||";
 
-                protected override IEnumerable<string> LeftAllowedTypes => Types.AnyTypes;
-                protected override IEnumerable<string> RightAllowedTypes => Types.AnyTypes;
-
-                public override string Type { get; set; } = Types.Boolean;
+                public override string Type { get; set; } = Types.Integer;
 
                 public Or() : base(Token)
                 {
                 }
 
-                public override IExpression Call(Environment env, string op, IExpression left, IExpression right)
+                public override IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments)
                 {
-                    return If.EvaluateCondition(env, left) || If.EvaluateCondition(env, right) ? Boolean.True : Boolean.False;
+                    var values = arguments.ToArray();
+
+                    var head = values.First();
+                    var tails = values.Skip(1).ToArray();
+
+                    return tails.Aggregate(If.EvaluateCondition(env, head), (acc, v) => acc || If.EvaluateCondition(env, v)) ? Boolean.True : Boolean.False;
                 }
             }
         }

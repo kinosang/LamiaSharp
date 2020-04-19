@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -10,12 +11,9 @@ namespace LamiaSharp.Keywords
         public static partial class Bitwise
         {
             [Alias(Token)]
-            public class BitXor : BinaryExpression
+            public class BitXor : DynamicExpression
             {
                 public const string Token = "^";
-
-                protected override IEnumerable<string> LeftAllowedTypes => new[] { Types.Integer };
-                protected override IEnumerable<string> RightAllowedTypes => new[] { Types.Integer };
 
                 public override string Type { get; set; } = Types.Integer;
 
@@ -23,32 +21,14 @@ namespace LamiaSharp.Keywords
                 {
                 }
 
-                public override IExpression Call(Environment env, string op, IExpression left, IExpression right)
+                public override IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments)
                 {
-                    var l = left.Evaluate(env);
-                    var r = right.Evaluate(env);
+                    var values = arguments.Select(a => a.Evaluate(env)).OfType<Integer>().ToArray();
 
-                    if (!(l is IValue lv))
-                    {
-                        throw new System.Exception($"Except value, got {l}");
-                    }
+                    var head = values.First();
+                    var tails = values.Skip(1).ToArray();
 
-                    if (!(r is IValue rv))
-                    {
-                        throw new System.Exception($"Except value, got {r}");
-                    }
-
-                    if (!(lv.Boxed is long lvalue))
-                    {
-                        throw new System.Exception($"Except integer, got {rv.Boxed}");
-                    }
-
-                    if (!(rv.Boxed is long rvalue))
-                    {
-                        throw new System.Exception($"Except integer, got {rv.Boxed}");
-                    }
-
-                    return new Integer(lvalue ^ rvalue);
+                    return new Integer(tails.Aggregate((long)head.Boxed, (acc, v) => acc ^ (long)v.Boxed));
                 }
             }
         }
