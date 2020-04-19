@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using LamiaSharp.Exceptions;
 using LamiaSharp.Expressions;
 using LamiaSharp.Keywords;
 using LamiaSharp.Values;
 
+// ReSharper disable once CheckNamespace
 namespace LamiaSharp
 {
     public class Parser
     {
+        private static Dictionary<string, System.Type> _keywords;
+
         public const string Boc = "(";
         public const string Eoc = ")";
         public const string Comment = ";;";
@@ -34,19 +38,25 @@ namespace LamiaSharp
 
         public static ExpressionList Listize(string[] tokens)
         {
-            var list = tokens[0] switch
+            if (_keywords == null)
             {
-                Let.Token => new Let(),
-                If.Token => new If(),
-                Lambda.Token => new Lambda(),
-                "lambda" => new Lambda(),
-                Gt.Token => new Gt(),
-                Lt.Token => new Lt(),
-                Add.Token => new Add(),
-                Minus.Token => new Minus(),
-                _ => new ExpressionList(tokens[0])
-            };
+                Boot();
+            }
 
+            ExpressionList list;
+            var op = tokens[0];
+
+            // ReSharper disable once PossibleNullReferenceException
+            if (_keywords.TryGetValue(op, out var keyword))
+            {
+                list = System.Activator.CreateInstance(keyword) as ExpressionList;
+            }
+            else
+            {
+                list = new ExpressionList(tokens[0]);
+            }
+
+            // ReSharper disable once PossibleNullReferenceException
             list.Elongate();
 
             for (var i = 1; i < tokens.Length; i++)
@@ -98,6 +108,24 @@ namespace LamiaSharp
             var tokens = Tokenize(input);
 
             return Evaluatize(tokens);
+        }
+
+        private static void Boot()
+        {
+            _keywords = new Dictionary<string, System.Type>();
+
+            foreach (var cls in typeof(InternalKeywords).GetNestedTypes())
+            {
+                foreach (var keyword in cls.GetNestedTypes())
+                {
+                    _keywords[keyword.Name.ToLower()] = keyword;
+
+                    foreach (var alias in keyword.GetCustomAttributes<AliasAttribute>())
+                    {
+                        _keywords[alias.Name.ToLower()] = keyword;
+                    }
+                }
+            }
         }
     }
 }

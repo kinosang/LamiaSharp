@@ -8,13 +8,13 @@ namespace LamiaSharp
         static void Main(string[] args)
         {
             const string lisp = @"
- (let fib (lambda (n) ;; Fibonacci!
-     (if (< n 2)
-         1
-         (+ (fib (- n 1)) (fib (- n 2))))))
+(let fib (lambda (n) ;; Fibonacci!
+    (if (< n 2)
+        1
+        (+ (fib (- n 1)) (fib (- n 2))))))
 
- (fib 2)
- ";
+(fib 2)
+";
 
             var program = Parser.Parse(lisp);
 
