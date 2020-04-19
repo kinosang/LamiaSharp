@@ -19,26 +19,34 @@ namespace LamiaSharp.Keywords
                 {
                 }
 
+                public static bool EvaluateCondition(Environment env, IExpression condition)
+                {
+                    var result = condition.Evaluate(env);
+
+                    if (!(result is IValue value)) return false;
+
+                    switch (value.Type)
+                    {
+                        case Types.Boolean when (bool)value.Boxed:
+                        case Types.String when !string.IsNullOrWhiteSpace((string)value.Boxed):
+                        case Types.Integer when (long)value.Boxed > 0:
+                        case Types.Double when (double)value.Boxed > 0:
+                        case Types.Real when (decimal)value.Boxed > 0:
+                            return true;
+                    }
+
+                    return false;
+                }
+
                 public override IExpression Evaluate(Environment env)
                 {
                     var condition = First.Next;
                     var action1 = condition.Next;
                     var action2 = action1.Next;
 
-                    var result = condition.Value.Evaluate(env);
-
-                    if (!(result is IValue value)) return Nil.Default;
-
-                    switch (value.Type)
+                    if (EvaluateCondition(env, condition.Value))
                     {
-                        case Types.Boolean when (bool)value.Boxed:
-                            return action1.Value.Evaluate(env);
-                        case Types.String when !string.IsNullOrWhiteSpace((string)value.Boxed):
-                            return action1.Value.Evaluate(env);
-                        case Types.Integer when (long)value.Boxed > 0:
-                        case Types.Double when (double)value.Boxed > 0:
-                        case Types.Real when (decimal)value.Boxed > 0:
-                            return action1.Value.Evaluate(env);
+                        return action1.Value.Evaluate(env);
                     }
 
                     return action2 == null ? Nil.Default : action2.Value.Evaluate(env);
