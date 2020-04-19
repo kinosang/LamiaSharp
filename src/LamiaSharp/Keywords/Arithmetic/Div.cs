@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using LamiaSharp.Exceptions;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -11,16 +10,17 @@ namespace LamiaSharp.Keywords
         public static partial class Arithmetic
         {
             [Alias(Token)]
-            public class Lt : BinaryExpression
+            public class Div : BinaryExpression
             {
-                public const string Token = "<";
+                public const string Token = "/";
 
                 protected override IEnumerable<string> LeftAllowedTypes => Types.NumericTypes;
                 protected override IEnumerable<string> RightAllowedTypes => Types.NumericTypes;
 
-                public override string Type { get; set; } = Types.Boolean;
+                // TODO: Update Type to actual
+                public override string Type { get; set; } = Types.Any;
 
-                public Lt() : base(Token)
+                public Div() : base(Token)
                 {
                 }
 
@@ -31,25 +31,28 @@ namespace LamiaSharp.Keywords
 
                     if (!(l is IValue lv))
                     {
-                        throw new RuntimeException($"Except value, got {l}");
+                        throw new System.Exception($"Except value, got {l}");
                     }
 
                     if (!(r is IValue rv))
                     {
-                        throw new RuntimeException($"Except value, got {r}");
+                        throw new System.Exception($"Except value, got {r}");
                     }
 
                     if (lv.Boxed is decimal || rv.Boxed is decimal)
                     {
-                        return lv.Boxed as decimal? < (rv.Boxed as decimal?) ? Boolean.True : Boolean.False;
+                        var result = (lv.Boxed as decimal?) / (rv.Boxed as decimal?);
+                        return new Real(result ?? 0);
                     }
 
                     if (lv.Boxed is double || rv.Boxed is double)
                     {
-                        return lv.Boxed as double? < (rv.Boxed as double?) ? Boolean.True : Boolean.False;
+                        var result = (lv.Boxed as double?) / (rv.Boxed as double?);
+                        return new Double(result ?? 0);
                     }
 
-                    return lv.Boxed as long? < (rv.Boxed as long?) ? Boolean.True : Boolean.False;
+                    var final = (lv.Boxed as long?) / (rv.Boxed as long?);
+                    return new Integer(final ?? 0);
                 }
             }
         }

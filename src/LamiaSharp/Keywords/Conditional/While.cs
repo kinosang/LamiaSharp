@@ -6,7 +6,7 @@ namespace LamiaSharp.Keywords
 {
     internal static partial class InternalKeywords
     {
-        public static partial class Control
+        public static partial class Conditional
         {
             public class While : ExpressionList
             {

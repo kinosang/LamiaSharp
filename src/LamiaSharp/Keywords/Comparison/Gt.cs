@@ -8,7 +8,7 @@ namespace LamiaSharp.Keywords
 {
     internal static partial class InternalKeywords
     {
-        public static partial class Arithmetic
+        public static partial class Comparison
         {
             [Alias(Token)]
             public class Gt : BinaryExpression

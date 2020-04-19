@@ -10,9 +10,9 @@ namespace LamiaSharp.Keywords
         public static partial class Arithmetic
         {
             [Alias(Token)]
-            public class Minus : BinaryExpression
+            public class Mod : BinaryExpression
             {
-                public const string Token = "-";
+                public const string Token = "%";
 
                 protected override IEnumerable<string> LeftAllowedTypes => Types.NumericTypes;
                 protected override IEnumerable<string> RightAllowedTypes => Types.NumericTypes;
@@ -20,7 +20,7 @@ namespace LamiaSharp.Keywords
                 // TODO: Update Type to actual
                 public override string Type { get; set; } = Types.Any;
 
-                public Minus() : base(Token)
+                public Mod() : base(Token)
                 {
                 }
 
@@ -41,17 +41,17 @@ namespace LamiaSharp.Keywords
 
                     if (lv.Boxed is decimal || rv.Boxed is decimal)
                     {
-                        var result = (lv.Boxed as decimal?) - (rv.Boxed as decimal?);
+                        var result = (lv.Boxed as decimal?) % (rv.Boxed as decimal?);
                         return new Real(result ?? 0);
                     }
 
                     if (lv.Boxed is double || rv.Boxed is double)
                     {
-                        var result = (lv.Boxed as double?) - (rv.Boxed as double?);
+                        var result = (lv.Boxed as double?) % (rv.Boxed as double?);
                         return new Double(result ?? 0);
                     }
 
-                    var final = (lv.Boxed as long?) - (rv.Boxed as long?);
+                    var final = (lv.Boxed as long?) % (rv.Boxed as long?);
                     return new Integer(final ?? 0);
                 }
             }
