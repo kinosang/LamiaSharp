@@ -14,7 +14,7 @@ namespace LamiaSharp.Keywords
             [Alias(Token)]
             public class Lambda : DynamicExpression
             {
-                public const string Token = "¦Ë";
+                public const string Token = "Î»";
 
                 // TODO: Update Type to actual
                 public override string Type { get; set; } = "any -> any";

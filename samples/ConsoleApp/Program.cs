@@ -1,9 +1,10 @@
 using System;
+using LamiaSharp;
 using LamiaSharp.Values;
 
-namespace LamiaSharp
+namespace ConsoleApp
 {
-    public class Example
+    class Program
     {
         static void Main(string[] args)
         {

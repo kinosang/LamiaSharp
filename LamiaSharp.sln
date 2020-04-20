@@ -6,9 +6,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{87413F8E-DB0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{26B47C5A-CA1D-4D6A-9531-D1F81BD4A272}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{51D67D0C-2848-446A-B7AC-6937FD6F0507}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamiaSharp", "src\LamiaSharp\LamiaSharp.csproj", "{57B85B99-896C-43E2-8B50-2FD90844C180}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamiaSharp.Tests", "tests\LamiaSharp.Tests\LamiaSharp.Tests.csproj", "{7C073675-B659-403B-B128-B3A5652ACC0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{D29DF204-12D4-4CF6-8E19-AAEDD49F663B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 		{7C073675-B659-403B-B128-B3A5652ACC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C073675-B659-403B-B128-B3A5652ACC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C073675-B659-403B-B128-B3A5652ACC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D29DF204-12D4-4CF6-8E19-AAEDD49F663B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29DF204-12D4-4CF6-8E19-AAEDD49F663B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29DF204-12D4-4CF6-8E19-AAEDD49F663B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29DF204-12D4-4CF6-8E19-AAEDD49F663B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -31,6 +39,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{57B85B99-896C-43E2-8B50-2FD90844C180} = {87413F8E-DB0B-4E4A-B137-218539E3C7E4}
 		{7C073675-B659-403B-B128-B3A5652ACC0F} = {26B47C5A-CA1D-4D6A-9531-D1F81BD4A272}
+		{D29DF204-12D4-4CF6-8E19-AAEDD49F663B} = {51D67D0C-2848-446A-B7AC-6937FD6F0507}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44B735D9-66F1-4352-BA7F-21DEE61A7E45}
