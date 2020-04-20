@@ -31,17 +31,17 @@ namespace LamiaSharp.Keywords
 
                     if (values.Any(v => v.Boxed is decimal))
                     {
-                        var result = tails.Aggregate((decimal)head.Boxed, (acc, v) => acc - (decimal)v.Boxed);
+                        var result = tails.Aggregate(System.Convert.ToDecimal(head.Boxed), (acc, v) => acc - System.Convert.ToDecimal(v.Boxed));
                         return new Real(result);
                     }
 
                     if (values.Any(v => v.Boxed is double))
                     {
-                        var result = tails.Aggregate((double)head.Boxed, (acc, v) => acc - (double)v.Boxed);
+                        var result = tails.Aggregate(System.Convert.ToDouble(head.Boxed), (acc, v) => acc - System.Convert.ToDouble(v.Boxed));
                         return new Double(result);
                     }
 
-                    var final = tails.Aggregate((long)head.Boxed, (acc, v) => acc - (long)v.Boxed);
+                    var final = tails.Aggregate(System.Convert.ToInt64(head.Boxed), (acc, v) => acc - System.Convert.ToInt64(v.Boxed));
                     return new Integer(final);
                 }
             }
