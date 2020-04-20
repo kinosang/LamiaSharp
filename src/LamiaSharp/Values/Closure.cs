@@ -39,9 +39,9 @@ namespace LamiaSharp.Values
             return Call(runtime);
         }
 
-        public IExpression Call(IEnumerable<IValue> runtime)
+        public IExpression Call(IEnumerable<IValue> runtime, bool isolated = true)
         {
-            var env = new Environment(Environment);
+            var env = isolated ? new Environment(Environment) : Environment;
 
             foreach (var (p, arg) in Parameters.Zip(runtime, (p, arg) => (p, arg)))
             {
