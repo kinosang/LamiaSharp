@@ -1,7 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Authors>Chino Chang</Authors>
+        <Description>The LamiaSharp language</Description>
+        <PackageTags>LamiaSharp;lamia</PackageTags>
+
+        <TargetFramework>net5.0</TargetFramework>
+
+        <AssemblyName>LamiaSharp</AssemblyName>
+        <RootNamespace>LamiaSharp</RootNamespace>
+
+        <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 
 </Project>

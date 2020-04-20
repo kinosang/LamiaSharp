@@ -1,0 +1,19 @@
+<Project>
+    <!-- Package configuration -->
+    <PropertyGroup>
+        <Copyright>Copyright 2020 - present © Chino Chang</Copyright>
+
+        <Version>0.1.0</Version>
+        <PackageVersion>0.1.0</PackageVersion>
+
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>git://github.com/kinosang/LamiaSharp</RepositoryUrl>
+
+        <PackageLicense>LICENSE</PackageLicense>
+        <PackageProjectUrl>https://github.com/kinosang/LamiaSharp</PackageProjectUrl>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+</Project>
