@@ -48,6 +48,15 @@ namespace Lamia
 
                     var line = Console.ReadLine();
 
+                    if (line == "exit" || line == "quit")
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("Bye~");
+                        Console.ResetColor();
+
+                        return;
+                    }
+
                     try
                     {
                         var program = Parser.Parse(line);
