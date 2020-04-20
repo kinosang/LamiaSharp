@@ -2,6 +2,7 @@ using System.IO;
 using LamiaSharp;
 using LamiaSharp.Values;
 using Console = System.Console;
+using ConsoleColor = System.ConsoleColor;
 
 namespace Lamia
 {
@@ -41,7 +42,9 @@ namespace Lamia
 
                 while (true)
                 {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("Λ ");
+                    Console.ResetColor();
 
                     var line = Console.ReadLine();
 
@@ -51,12 +54,20 @@ namespace Lamia
 
                         program.Environment = env;
 
-                        Console.Write("= ");
+                        var result = program.Call(new IValue[0], false);
 
-                        Console.WriteLine(program.Call(new IValue[0], false));
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("= ");
+                        Console.ResetColor();
+
+                        Console.WriteLine(result);
                     }
                     catch (System.Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("× ");
+                        Console.ResetColor();
+
                         Console.WriteLine(ex.Message);
                     }
                 }
