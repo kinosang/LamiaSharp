@@ -36,7 +36,7 @@ namespace LamiaSharp
                 .ToArray();
         }
 
-        public static ExpressionList Listize(string[] tokens)
+        public static ExpressionList CreateSubStatement(string[] tokens)
         {
             if (_keywords == null)
             {
@@ -66,7 +66,7 @@ namespace LamiaSharp
                 switch (token)
                 {
                     case Boc:
-                        var node = Listize(tokens.Skip(i + 1).ToArray());
+                        var node = CreateSubStatement(tokens.Skip(i + 1).ToArray());
                         list.AddLast(node);
                         i += node.Tokens - 1;
                         break;
@@ -88,9 +88,14 @@ namespace LamiaSharp
 
             for (var i = 0; i < tokens.Length; i++)
             {
-                if (tokens[i] != Boc) continue;
+                if (tokens[i] != Boc)
+                {
+                    lines.Add(new ExpressionList(tokens[i]));
 
-                var line = Listize(tokens.Skip(i + 1).ToArray());
+                    continue;
+                }
+
+                var line = CreateSubStatement(tokens.Skip(i + 1).ToArray());
                 lines.Add(line);
                 i += line.Tokens - 1;
             }

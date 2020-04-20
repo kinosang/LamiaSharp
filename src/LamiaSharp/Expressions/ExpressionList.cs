@@ -27,7 +27,7 @@ namespace LamiaSharp.Expressions
         {
             Op = op;
 
-            AddFirst(new Symbol(op));
+            AddFirst(Expression.From(op));
         }
 
         public ExpressionList AddFirst(ExpressionListNode node)
@@ -113,19 +113,36 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
-            if (!env.TryGetValue(Op, out var express))
+            if (!env.TryGetValue(Op, out var symbol))
             {
-                throw new RuntimeException($"Call to undefined symbol '{Op}'");
+                return First.Value.Evaluate(env);
             }
 
-            var value = express.Evaluate(env);
+            var expression = symbol.Evaluate(env);
+
+            if (!(expression is IValue value))
+            {
+                throw new RuntimeException($"Except value, got '{expression}'");
+            }
 
             if (!(value is Closure closure))
             {
-                throw new RuntimeException($"Except closure, got '{value}'");
+                return value as IExpression;
             }
 
             var arguments = _values.Skip(1).Select(p => p.Evaluate(env)).OfType<IValue>();
+            var count = arguments.Count();
+
+            if (count == 0)
+            {
+                return closure;
+            }
+
+            var parameters = closure.Parameters.Count();
+            if (count != parameters)
+            {
+                throw new RuntimeException($"Except {parameters} arguments, only {count} provided");
+            }
 
             return closure.Call(arguments);
         }
