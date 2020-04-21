@@ -24,6 +24,6 @@ namespace LamiaSharp
 
         public static IEnumerable<string> AnyTypes = new[] { Any };
 
-        public static IEnumerable<string> NumericTypes = new[] { Double, Integer, Real };
+        public static IEnumerable<string> NumericTypes = new[] { Double, Integer, Real, Numeric };
     }
 }
