@@ -41,15 +41,15 @@ namespace LamiaSharp.Keywords
 
                     if (lv.Boxed is decimal || rv.Boxed is decimal)
                     {
-                        return lv.Boxed as decimal? < (rv.Boxed as decimal?) ? Boolean.True : Boolean.False;
+                        return System.Convert.ToDecimal(lv.Boxed) < System.Convert.ToDecimal(rv.Boxed) ? Boolean.True : Boolean.False;
                     }
 
                     if (lv.Boxed is double || rv.Boxed is double)
                     {
-                        return lv.Boxed as double? < (rv.Boxed as double?) ? Boolean.True : Boolean.False;
+                        return System.Convert.ToDouble(lv.Boxed) < System.Convert.ToDouble(rv.Boxed) ? Boolean.True : Boolean.False;
                     }
 
-                    return lv.Boxed as long? < (rv.Boxed as long?) ? Boolean.True : Boolean.False;
+                    return System.Convert.ToInt64(lv.Boxed) < System.Convert.ToInt64(rv.Boxed) ? Boolean.True : Boolean.False;
                 }
             }
         }
