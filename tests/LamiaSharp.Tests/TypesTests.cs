@@ -60,5 +60,13 @@ namespace LamiaSharp.Tests
             Assert.IsAssignableFrom<INumeric>(real);
             Assert.Equal("4.2m", real.ToString());
         }
+
+        [Fact]
+        public void TestCharType()
+        {
+            var character = Expression.From("\\c");
+            Assert.IsType<Char>(character);
+            Assert.Equal("\\c", character.ToString());
+        }
     }
 }

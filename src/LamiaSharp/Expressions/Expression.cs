@@ -13,7 +13,7 @@ namespace LamiaSharp.Expressions
             "true" => Boolean.True,
             "false" => Boolean.False,
             _ when token.StartsWith('"') => new String(token.Trim('"')),
-            _ when token.StartsWith('\\') => token.Length == 1 ? new Char(token[0]) : throw new RuntimeException($"Expect char, got '{token}'"),
+            _ when token.StartsWith('\\') => token.TrimStart('\\').Length == 1 ? new Char(token[1]) : throw new RuntimeException($"Expect char, got '{token}'"),
             _ when long.TryParse(token, out var l) => new Integer(l),
             _ when double.TryParse(token, out var d) => new Double(d),
             _ when token.EndsWith('m') && decimal.TryParse(token.Remove(token.Length - 1), out var m) => new Real(m),
