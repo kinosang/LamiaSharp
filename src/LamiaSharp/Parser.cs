@@ -53,13 +53,13 @@ namespace LamiaSharp
             }
             else
             {
-                list = new ExpressionList(tokens[0]);
+                list = new ExpressionList();
             }
 
             // ReSharper disable once PossibleNullReferenceException
             list.Elongate();
 
-            for (var i = 1; i < tokens.Length; i++)
+            for (var i = 0; i < tokens.Length; i++)
             {
                 var token = tokens[i];
 

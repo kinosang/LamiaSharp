@@ -23,11 +23,13 @@ namespace LamiaSharp.Expressions
 
         public int Tokens { get; private set; }
 
+        public ExpressionList()
+        {
+        }
+
         public ExpressionList(string op)
         {
             Op = op;
-
-            AddFirst(Expression.From(op));
         }
 
         public ExpressionList AddFirst(ExpressionListNode node)
@@ -45,18 +47,7 @@ namespace LamiaSharp.Expressions
                 First = node;
             }
 
-            _values.Insert(0, node.Value);
-
-            Count++;
-
-            if (node.Value is ExpressionList sub)
-            {
-                Tokens += sub.Tokens;
-            }
-            else
-            {
-                Tokens++;
-            }
+            UpdateEnumerable(node, true);
 
             return this;
         }
@@ -68,23 +59,20 @@ namespace LamiaSharp.Expressions
 
         public ExpressionList AddLast(ExpressionListNode node)
         {
-            Last.Next = node;
-            node.Previous = Last;
-
-            Last = node;
-
-            _values.Add(node.Value);
-
-            Count++;
-
-            if (node.Value is ExpressionList sub)
+            if (Last == null)
             {
-                Tokens += sub.Tokens;
+                First = node;
+                Last = First;
             }
             else
             {
-                Tokens++;
+                Last.Next = node;
+                node.Previous = Last;
+
+                Last = node;
             }
+
+            UpdateEnumerable(node);
 
             return this;
         }
@@ -113,9 +101,21 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
+            if (string.IsNullOrEmpty(Op))
+            {
+                IExpression result = Nil.Default;
+
+                foreach (var action in _values)
+                {
+                    result = action.Evaluate(env);
+                }
+
+                return result;
+            }
+
             if (!env.TryGetValue(Op, out var symbol))
             {
-                return First.Value.Evaluate(env);
+                throw new RuntimeException($"Call to undefined symbol '{Op}'");
             }
 
             var expression = symbol.Evaluate(env);
@@ -127,11 +127,11 @@ namespace LamiaSharp.Expressions
 
             if (!(value is Closure closure))
             {
-                return value as IExpression;
+                return value;
             }
 
-            var arguments = _values.Skip(1).Select(p => p.Evaluate(env)).OfType<IValue>();
-            var count = arguments.Count();
+            var arguments = _values.Skip(1).Select(p => p.Evaluate(env)).OfType<IValue>().ToArray();
+            var count = arguments.Length;
 
             if (count == 0)
             {
@@ -162,6 +162,29 @@ namespace LamiaSharp.Expressions
             buf += Parser.Eoc;
 
             return buf;
+        }
+
+        private void UpdateEnumerable(ExpressionListNode node, bool prepend = false)
+        {
+            if (prepend)
+            {
+                _values.Insert(0, node.Value);
+            }
+            else
+            {
+                _values.Add(node.Value);
+            }
+
+            Count++;
+
+            if (node.Value is ExpressionList sub)
+            {
+                Tokens += sub.Tokens;
+            }
+            else
+            {
+                Tokens++;
+            }
         }
     }
 }
