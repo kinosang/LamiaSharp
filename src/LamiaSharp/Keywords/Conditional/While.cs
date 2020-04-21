@@ -1,3 +1,4 @@
+using System.Linq;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -21,14 +22,16 @@ namespace LamiaSharp.Keywords
 
                 public override IExpression Evaluate(Environment env)
                 {
-                    var condition = First.Next;
-                    var action = condition.Next;
+                    var condition = Values[1];
 
                     IExpression result = Nil.Default;
 
-                    while (If.EvaluateCondition(env, condition.Value))
+                    while (If.EvaluateCondition(env, condition))
                     {
-                        result = action.Value.Evaluate(env);
+                        foreach (var action in Values.Skip(2))
+                        {
+                            result = action.Evaluate(env);
+                        }
                     }
 
                     return result;

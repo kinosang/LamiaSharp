@@ -15,20 +15,20 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
-            var left = First.Next;
-            var right = left.Next;
+            var left = Values[1];
+            var right = Values[2];
 
-            if (left.Value.Type != Types.Any && !LeftAllowedTypes.Contains(Types.Any) && !LeftAllowedTypes.Contains(left.Value.Type))
+            if (left.Type != Types.Any && !LeftAllowedTypes.Contains(Types.Any) && !LeftAllowedTypes.Contains(left.Type))
             {
-                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", LeftAllowedTypes)}, got {left.Value.Type}");
+                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", LeftAllowedTypes)}, got {left.Type}");
             }
 
-            if (right.Value.Type != Types.Any && !RightAllowedTypes.Contains(Types.Any) && !RightAllowedTypes.Contains(right.Value.Type))
+            if (right.Type != Types.Any && !RightAllowedTypes.Contains(Types.Any) && !RightAllowedTypes.Contains(right.Type))
             {
-                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", LeftAllowedTypes)}, got {right.Value.Type}");
+                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", LeftAllowedTypes)}, got {right.Type}");
             }
 
-            return Call(env, Op, left.Value, right.Value);
+            return Call(env, Op, left, right);
         }
 
         public abstract IExpression Call(Environment env, string op, IExpression left, IExpression right);

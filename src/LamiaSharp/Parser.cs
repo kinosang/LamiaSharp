@@ -67,14 +67,14 @@ namespace LamiaSharp
                 {
                     case Boc:
                         var node = CreateSubStatement(tokens.Skip(i + 1).ToArray());
-                        list.AddLast(node);
+                        list.Add(node);
                         i += node.Tokens - 1;
                         break;
                     case Eoc:
                         list.Elongate();
                         return list;
                     default:
-                        list.AddLast(Expression.From(token));
+                        list.Add(Expression.From(token));
                         break;
                 }
             }

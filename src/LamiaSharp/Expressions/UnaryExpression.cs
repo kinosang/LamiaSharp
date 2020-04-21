@@ -14,14 +14,14 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
-            var operand = First.Next;
+            var operand = Values[1];
 
-            if (operand.Value.Type != Types.Any && !AllowedTypes.Contains(Types.Any) && !AllowedTypes.Contains(operand.Value.Type))
+            if (operand.Type != Types.Any && !AllowedTypes.Contains(Types.Any) && !AllowedTypes.Contains(operand.Type))
             {
-                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", AllowedTypes)}, got {operand.Value.Type}");
+                throw new RuntimeException($"Unexpected type, expect {string.Join(", ", AllowedTypes)}, got {operand.Type}");
             }
 
-            return Call(env, Op, operand.Value);
+            return Call(env, Op, operand);
         }
 
         public abstract IExpression Call(Environment env, string op, IExpression operand);

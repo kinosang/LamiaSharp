@@ -40,16 +40,16 @@ namespace LamiaSharp.Keywords
 
                 public override IExpression Evaluate(Environment env)
                 {
-                    var condition = First.Next;
-                    var action1 = condition.Next;
-                    var action2 = action1.Next;
+                    var condition = Values[1];
+                    var action1 = Values[2];
+                    var action2 = Values[3];
 
-                    if (EvaluateCondition(env, condition.Value))
+                    if (EvaluateCondition(env, condition))
                     {
-                        return action1.Value.Evaluate(env);
+                        return action1.Evaluate(env);
                     }
 
-                    return action2 == null ? Nil.Default : action2.Value.Evaluate(env);
+                    return action2 == null ? Nil.Default : action2.Evaluate(env);
                 }
             }
         }

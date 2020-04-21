@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LamiaSharp.Expressions
 {
@@ -10,17 +11,7 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
-            var tail = First.Next;
-
-            var arguments = new List<IExpression>();
-            while (tail != null)
-            {
-                arguments.Add(tail.Value);
-
-                tail = tail.Next;
-            }
-
-            return Call(env, Op, arguments);
+            return Call(env, Op, Values.Skip(1));
         }
 
         public abstract IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments);
