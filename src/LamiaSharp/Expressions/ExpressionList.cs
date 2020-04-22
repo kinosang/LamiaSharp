@@ -24,7 +24,7 @@ namespace LamiaSharp.Expressions
             Op = op;
         }
 
-        public ExpressionList Add(IExpression node)
+        public virtual ExpressionList Add(IExpression node)
         {
             Values.Add(node);
 

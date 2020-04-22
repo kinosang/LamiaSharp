@@ -23,6 +23,11 @@ namespace LamiaSharp.Keywords
                 {
                 }
 
+                public override ExpressionList Add(IExpression node)
+                {
+                    return base.Add(Values.Count == 0 ? new Symbol(Token) : node);
+                }
+
                 public override IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments)
                 {
                     var expressions = arguments.ToArray();
