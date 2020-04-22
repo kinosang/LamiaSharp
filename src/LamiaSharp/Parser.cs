@@ -35,11 +35,8 @@ namespace LamiaSharp
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToList();
 
-            if (tokens.First() != Boc)
-            {
-                tokens.Insert(0, Boc);
-                tokens.Add(Eoc);
-            }
+            tokens.Insert(0, Boc);
+            tokens.Add(Eoc);
 
             return tokens;
         }
@@ -68,7 +65,7 @@ namespace LamiaSharp
             {
                 Boot();
             }
-            
+
             Debug.Assert(_keywords != null, nameof(_keywords) + " != null");
 
             var stack = new Stack<ExpressionList>();
@@ -94,7 +91,12 @@ namespace LamiaSharp
                         var list = stack.Pop();
                         list.Elongate();
 
-                        if (stack.Count == 0) return list;
+                        if (stack.Count == 0)
+                        {
+                            if (list.Count == 1 && list.First() is ExpressionList first) return first;
+
+                            return list;
+                        }
 
                         stack.Peek().Add(list);
                         break;

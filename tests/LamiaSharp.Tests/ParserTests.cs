@@ -48,19 +48,40 @@ namespace LamiaSharp.Tests
         [Fact]
         public void TestParseNestedList()
         {
-            var list = Parser.Parse("((42 42) 42)");
+            var list = Parser.Parse("((+ 24 24) 42)");
 
             Assert.IsType<ExpressionList>(list);
 
             var first = list.First();
 
-            Assert.IsType<ExpressionList>(first);
-            Assert.Equal("(42 42)", first.ToString());
+            Assert.IsAssignableFrom<ExpressionList>(first);
+            Assert.IsType<InternalKeywords.Arithmetic.Add>(first);
+            Assert.Equal("(+ 24 24)", first.ToString());
 
             var second = list.Skip(1).First();
 
             Assert.IsType<Integer>(second);
             Assert.Equal("42", second.ToString());
+        }
+
+        [Fact]
+        public void TestParseMultiList()
+        {
+            var list = Parser.Parse("(+ 24 24) (+ 24 24)");
+
+            Assert.IsType<ExpressionList>(list);
+
+            var first = list.First();
+
+            Assert.IsAssignableFrom<ExpressionList>(first);
+            Assert.IsType<InternalKeywords.Arithmetic.Add>(first);
+            Assert.Equal("(+ 24 24)", first.ToString());
+
+            var second = list.Skip(1).First();
+
+            Assert.IsAssignableFrom<ExpressionList>(second);
+            Assert.IsType<InternalKeywords.Arithmetic.Add>(second);
+            Assert.Equal("(+ 24 24)", second.ToString());
         }
 
         [Fact]
@@ -83,12 +104,12 @@ namespace LamiaSharp.Tests
 
             Assert.IsType<Symbol>(first);
             Assert.Equal("let", first.ToString());
-            
+
             var second = procedure.Skip(1).First();
 
             Assert.IsType<Symbol>(second);
             Assert.Equal("fib", second.ToString());
-            
+
             var third = procedure.Skip(2).First();
 
             Assert.IsType<InternalKeywords.Base.Lambda>(third);
