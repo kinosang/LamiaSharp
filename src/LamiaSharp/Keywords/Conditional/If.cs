@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using LamiaSharp.Expressions;
 using LamiaSharp.Values;
 
@@ -8,9 +11,11 @@ namespace LamiaSharp.Keywords
     {
         public static partial class Conditional
         {
-            public class If : ExpressionList
+            public class If : DynamicExpression
             {
                 public const string Token = "if";
+
+                protected override Range Range => new Range(2, 3);
 
                 // TODO: Update Type to actual
                 public override string Type { get; set; } = Types.Any;
@@ -38,11 +43,13 @@ namespace LamiaSharp.Keywords
                     return false;
                 }
 
-                public override IExpression Evaluate(Environment env)
+                public override IExpression Call(Environment env, string op, IEnumerable<IExpression> arguments)
                 {
-                    var condition = Values[1];
-                    var action1 = Values[2];
-                    var action2 = Values[3];
+                    var expressions = arguments.ToArray();
+
+                    var condition = expressions[0];
+                    var action1 = expressions[1];
+                    var action2 = expressions[2];
 
                     if (EvaluateCondition(env, condition))
                     {

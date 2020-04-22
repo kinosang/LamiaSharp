@@ -15,6 +15,11 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
+            if (Values.Count != 3)
+            {
+                throw new RuntimeException($"Expect 2 arguments, got {Values.Count - 1}");
+            }
+
             var left = Values[1];
             var right = Values[2];
 

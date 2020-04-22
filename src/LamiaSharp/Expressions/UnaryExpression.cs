@@ -14,6 +14,11 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
+            if (Values.Count != 2)
+            {
+                throw new RuntimeException($"Expect 1 arguments, got {Values.Count - 1}");
+            }
+
             var operand = Values[1];
 
             if (operand.Type != Types.Any && !AllowedTypes.Contains(Types.Any) && !AllowedTypes.Contains(operand.Type))
