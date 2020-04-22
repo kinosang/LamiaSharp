@@ -1,6 +1,5 @@
 using System.IO;
 using LamiaSharp;
-using LamiaSharp.Values;
 using Console = System.Console;
 using ConsoleColor = System.ConsoleColor;
 
@@ -29,7 +28,7 @@ namespace Lamia
             {
                 var program = Parser.Parse(File.ReadAllText(args[0]));
 
-                Console.WriteLine(program.Run(new IValue[0]));
+                Console.WriteLine(program.Evaluate(new Environment()));
 
                 return;
             }
@@ -61,9 +60,7 @@ namespace Lamia
                     {
                         var program = Parser.Parse(line);
 
-                        program.Environment = env;
-
-                        var result = program.Call(new IValue[0], false);
+                        var result = program.Evaluate(env);
 
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("= ");

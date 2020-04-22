@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using LamiaSharp.Exceptions;
 using LamiaSharp.Expressions;
 using LamiaSharp.Keywords;
-using LamiaSharp.Values;
 
 // ReSharper disable once CheckNamespace
 namespace LamiaSharp
@@ -17,14 +17,14 @@ namespace LamiaSharp
         public const string Eoc = ")";
         public const string Comment = ";;";
 
-        public static string[] Tokenize(string input)
+        public static IList<string> Tokenize(string input)
         {
             var lines = input
                 .Replace(Boc, $" {Boc} ")
                 .Replace(Eoc, $" {Eoc} ")
                 .Split('\n');
 
-            return lines
+            var tokens = lines
                 .Select(l =>
                 {
                     var i = l.IndexOf(Comment, System.StringComparison.Ordinal);
@@ -33,89 +33,18 @@ namespace LamiaSharp
                 })
                 .SelectMany(l => l.Split())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToArray();
+                .ToList();
+
+            if (tokens.First() != Boc)
+            {
+                tokens.Insert(0, Boc);
+                tokens.Add(Eoc);
+            }
+
+            return tokens;
         }
 
-        public static ExpressionList CreateSubStatement(string[] tokens)
-        {
-            if (_keywords == null)
-            {
-                Boot();
-            }
-
-            ExpressionList list;
-            var op = tokens[0];
-
-            // ReSharper disable once PossibleNullReferenceException
-            if (_keywords.TryGetValue(op, out var keyword))
-            {
-                list = System.Activator.CreateInstance(keyword) as ExpressionList;
-            }
-            else
-            {
-                list = new ExpressionList();
-            }
-
-            // ReSharper disable once PossibleNullReferenceException
-            list.Elongate();
-
-            for (var i = 0; i < tokens.Length; i++)
-            {
-                var token = tokens[i];
-
-                switch (token)
-                {
-                    case Boc:
-                        var node = CreateSubStatement(tokens.Skip(i + 1).ToArray());
-                        list.Add(node);
-                        i += node.Tokens - 1;
-                        break;
-                    case Eoc:
-                        list.Elongate();
-                        return list;
-                    default:
-                        list.Add(Expression.From(token));
-                        break;
-                }
-            }
-
-            throw new RuntimeException($"Expect '{Eoc}'");
-        }
-
-        public static Closure Evaluatize(string[] tokens)
-        {
-            var lines = new List<ExpressionList>();
-
-            for (var i = 0; i < tokens.Length; i++)
-            {
-                if (tokens[i] != Boc)
-                {
-                    lines.Add(new ExpressionList(tokens[i]));
-
-                    continue;
-                }
-
-                var line = CreateSubStatement(tokens.Skip(i + 1).ToArray());
-                lines.Add(line);
-                i += line.Tokens - 1;
-            }
-
-            if (lines.Count > 0)
-            {
-                return new Closure(new Symbol[0], lines);
-            }
-
-            throw new RuntimeException($"Expect '{Boc}'");
-        }
-
-        public static Closure Parse(string input)
-        {
-            var tokens = Tokenize(input);
-
-            return Evaluatize(tokens);
-        }
-
-        private static void Boot()
+        public static void Boot()
         {
             _keywords = new Dictionary<string, System.Type>();
 
@@ -131,6 +60,58 @@ namespace LamiaSharp
                     }
                 }
             }
+        }
+
+        public static ExpressionList Evaluatize(IList<string> tokens)
+        {
+            if (_keywords == null)
+            {
+                Boot();
+            }
+            
+            Debug.Assert(_keywords != null, nameof(_keywords) + " != null");
+
+            var stack = new Stack<ExpressionList>();
+
+            for (var i = 0; i < tokens.Count; i++)
+            {
+                var token = tokens[i];
+
+                switch (token)
+                {
+                    case Boc:
+                        var op = tokens[i + 1];
+                        var node = _keywords.TryGetValue(op, out var keyword)
+                                        ? System.Activator.CreateInstance(keyword) as ExpressionList
+                                        : new ExpressionList(op);
+
+                        Debug.Assert(node != null, nameof(node) + " != null");
+
+                        node.Elongate();
+                        stack.Push(node);
+                        break;
+                    case Eoc:
+                        var list = stack.Pop();
+                        list.Elongate();
+
+                        if (stack.Count == 0) return list;
+
+                        stack.Peek().Add(list);
+                        break;
+                    default:
+                        stack.Peek().Add(Expression.From(token));
+                        break;
+                }
+            }
+
+            throw new RuntimeException($"Expect '{Eoc}'");
+        }
+
+        public static ExpressionList Parse(string input)
+        {
+            var tokens = Tokenize(input);
+
+            return Evaluatize(tokens);
         }
     }
 }

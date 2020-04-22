@@ -19,25 +19,14 @@ namespace LamiaSharp.Expressions
 
         public int Tokens { get; private set; }
 
-        public ExpressionList()
-        {
-        }
-
         public ExpressionList(string op)
         {
             Op = op;
         }
 
-        public ExpressionList Add(IExpression node, bool prepend = false)
+        public ExpressionList Add(IExpression node)
         {
-            if (prepend)
-            {
-                Values.Insert(0, node);
-            }
-            else
-            {
-                Values.Add(node);
-            }
+            Values.Add(node);
 
             Count++;
 
@@ -72,7 +61,7 @@ namespace LamiaSharp.Expressions
 
         public override IExpression Evaluate(Environment env)
         {
-            if (string.IsNullOrEmpty(Op))
+            if (!env.TryGetValue(Op, out var symbol))
             {
                 IExpression result = Nil.Default;
 
@@ -82,11 +71,6 @@ namespace LamiaSharp.Expressions
                 }
 
                 return result;
-            }
-
-            if (!env.TryGetValue(Op, out var symbol))
-            {
-                throw new RuntimeException($"Call to undefined symbol '{Op}'");
             }
 
             var expression = symbol.Evaluate(env);
